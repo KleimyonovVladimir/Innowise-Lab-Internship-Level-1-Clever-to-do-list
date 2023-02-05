@@ -11,7 +11,6 @@ module.exports = {
   plugins: ['react', 'simple-import-sort'],
   rules: {
     'no-unused-vars': 1,
-    'arrow-body-style': 1,
     'import/no-anonymous-default-export': 0,
     'import/no-unresolved': 0,
     'react/destructuring-assignment': 1,
