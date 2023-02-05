@@ -1,6 +1,6 @@
-// Import the functions you need from the SDKs you need
 import { getFirestore } from '@firebase/firestore'
 import { initializeApp } from 'firebase/app'
+import { getAuth } from 'firebase/auth'
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -13,4 +13,6 @@ const firebaseConfig = {
 }
 
 const app = initializeApp(firebaseConfig)
+export const auth = getAuth(app)
 export const dataBase = getFirestore(app)
+export default app
