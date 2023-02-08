@@ -1,7 +1,7 @@
+import { useMediaQuery } from 'react-responsive'
 import { Link } from 'react-router-dom'
-
-import Button from '../Button'
-import Input from '../Input'
+import { Button, TextField } from '@mui/material'
+import clsx from 'clsx'
 
 import './styles.scss'
 
@@ -15,19 +15,21 @@ const LoginForm = ({
   onChangeForEmail,
   onChangeForPassword
 }) => {
+  const isMobile = useMediaQuery({ query: '(max-width: 576px)' })
+
   return (
-    <div className="form-container">
+    <div className={clsx('form-container', isMobile && 'form-container-mobile form-login-wrapper')}>
       <h1 className="form-title">{title}</h1>
       <form onSubmit={onSubmit}>
         <div className="form-inputs-container">
-          <Input
+          <TextField
             name="email"
             type="email"
             label="Email"
             placeholder="example@gmail.com"
             onChange={onChangeForEmail}
           />
-          <Input
+          <TextField
             name="password"
             type="password"
             label="Password"
@@ -35,10 +37,13 @@ const LoginForm = ({
             onChange={onChangeForPassword}
           />
         </div>
-        <Button type="submit">{buttonText}</Button>
+        <Button variant="contained" fullWidth type="submit">
+          {buttonText}
+        </Button>
       </form>
-      <div className="form-message">
+      <div className={clsx('form-message', isMobile && 'form-message-mobile')}>
         <p>{formMessage}</p>
+
         <Link to={`/${link}`}>{linkText}</Link>
       </div>
     </div>

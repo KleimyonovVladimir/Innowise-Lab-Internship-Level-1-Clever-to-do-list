@@ -1,0 +1,14 @@
+.todo-form {
+  display: grid;
+  grid-template-rows: auto;
+  grid-gap: 20px;
+  width: fit-content;
+
+  &-button {
+    margin-top: 24px;
+  }
+}
+.from-title-wrapper {
+  display: flex;
+  align-items: center;
+}

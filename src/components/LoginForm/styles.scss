@@ -1,3 +1,5 @@
+@import '../../styles/variables/_colors.module.scss';
+
 .form {
   &-container {
     width: 500px;
@@ -5,6 +7,15 @@
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
+
+    &-mobile {
+      width: auto;
+      position: static;
+      left: 0;
+      top: 0;
+      transform: translate(0, 0);
+      padding: 15px;
+    }
   }
   &-title {
     margin-bottom: 32px;
@@ -20,8 +31,19 @@
     margin-top: 10px;
     font-size: 18px;
 
+    &-mobile {
+      p,
+      a {
+        font-size: 14px;
+      }
+    }
+
     p {
       margin-right: 10px;
+    }
+
+    a {
+      border-bottom: 1px solid $ui-color-light-blue;
     }
   }
 }

@@ -8,24 +8,31 @@ import {
   signOut
 } from 'firebase/auth'
 
+import { userRepository } from '../config/userRepository'
 import { auth } from '../firebase-config'
 
 const AuthContext = createContext()
 
 export const AuthContextProvider = ({ children }) => {
-  const [user, setUser] = useState({})
+  const [authUser, setAuthUser] = useState(userRepository.getUser())
 
-  const signIn = (email, password) => signInWithEmailAndPassword(auth, email, password)
+  const signIn = async (email, password) => await signInWithEmailAndPassword(auth, email, password)
 
-  const logOut = () => signOut(auth)
+  const logOut = async () => await signOut(auth)
 
-  const createUser = (email, password) => {
-    createUserWithEmailAndPassword(auth, email, password)
+  const createUser = async (email, password) => {
+    await createUserWithEmailAndPassword(auth, email, password)
+  }
+
+  const authUserChangeHandler = user => {
+    setAuthUser(user)
+
+    user ? userRepository.setUser(user) : userRepository.removeUser()
   }
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, currentUser => {
-      setUser(currentUser)
+      setAuthUser(currentUser)
     })
 
     return () => {
@@ -34,7 +41,7 @@ export const AuthContextProvider = ({ children }) => {
   }, [])
 
   return (
-    <AuthContext.Provider value={{ createUser, user, signIn, logOut }}>
+    <AuthContext.Provider value={{ createUser, authUser, signIn, logOut, authUserChangeHandler }}>
       {children}
     </AuthContext.Provider>
   )

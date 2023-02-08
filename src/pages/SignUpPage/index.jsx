@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router'
 
 import LoginForm from '../../components/LoginForm'
 import { useAuthContext } from '../../context/AuthContext'
+import { toastMessage } from '../../utils/toastMessage'
 
 const SignUpPage = () => {
   const navigate = useNavigate()
@@ -17,9 +18,9 @@ const SignUpPage = () => {
 
     try {
       await createUser(email, password)
-      navigate('/home')
+      navigate('/login')
     } catch (error) {
-      console.log(error.message)
+      toastMessage(error.message)
     }
   }
   return (

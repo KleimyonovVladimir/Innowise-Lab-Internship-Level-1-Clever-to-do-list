@@ -3,23 +3,27 @@ import { useNavigate } from 'react-router'
 
 import LoginForm from '../../components/LoginForm'
 import { useAuthContext } from '../../context/AuthContext'
+import { toastMessage } from '../../utils/toastMessage'
 
 const SignInPage = () => {
   const navigate = useNavigate()
 
+  const authContext = useAuthContext()
+  const { signIn } = useAuthContext()
+
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-
-  const { signIn } = useAuthContext()
 
   const handleSubmit = async event => {
     event.preventDefault()
 
     try {
-      await signIn(email, password)
+      const response = await signIn(email, password)
+      authContext.authUserChangeHandler(response)
+
       navigate('/home')
     } catch (error) {
-      console.log(error.message)
+      toastMessage(error.message)
     }
   }
 

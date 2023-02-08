@@ -11,6 +11,9 @@ body {
 h1 {
   font-size: 30px;
 }
+h4 {
+  color: $ui-color-dark-blue;
+}
 ul,
 li {
   list-style: none;
@@ -22,5 +25,4 @@ input:focus {
 a {
   text-decoration: none;
   color: $ui-color-light-blue;
-  border-bottom: 1px solid $ui-color-light-blue;
 }

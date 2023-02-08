@@ -1,0 +1,48 @@
+@import '../../styles/variables';
+
+.calendar-day {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid $ui-color-dark-blue;
+  border-radius: 14px;
+  padding: 12px;
+  width: fit-content;
+  cursor: pointer;
+  width: 50px;
+  transition: ease 0.1s all;
+
+  &:hover {
+    background-color: $ui-color-dark-blue;
+    color: $ui-color-white;
+  }
+}
+.day {
+  &-number {
+    margin-top: 6px;
+  }
+}
+.active-day {
+  background-color: $ui-color-dark-blue;
+  color: $ui-color-white;
+}
+.has {
+  &-nothing {
+    display: none;
+  }
+  &-active-todo,
+  &-done-todo {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+  &-active-todo {
+    background-color: $ui-color-primary;
+    margin-right: 4px;
+  }
+  &-done-todo {
+    background-color: $ui-color-light-blue;
+  }
+}
