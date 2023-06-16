@@ -28,6 +28,12 @@ How you can see, _todos_ contains as much _todo-item_(document) as we want. Ever
 
 For work with query in our application were used firebase methods such as `getDoc()`, `updateDoc()`, `deleteDoc()` etc.
 
+**All secret-values located in `.env` file**
+
+Copy the example env file and make the required configuration changes in the .env file
+
+`cp .env.example .env`
+
 ## Application stack :memo: 
 
 This is application includes technologies such as: **_SASS, Material UI, Firebase_**.
