@@ -9,7 +9,7 @@ const SignInPage = () => {
   const navigate = useNavigate()
 
   const authContext = useAuthContext()
-  const { signIn } = useAuthContext()
+  const { signIn, googleSignIn } = useAuthContext()
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -27,6 +27,16 @@ const SignInPage = () => {
     }
   }
 
+  const handleGoogleSignIn = async () => {
+    try {
+      await googleSignIn()
+
+      navigate('/home')
+    } catch (error) {
+      toastMessage(error.message)
+    }
+  }
+
   return (
     <>
       <LoginForm
@@ -36,6 +46,7 @@ const SignInPage = () => {
         formMessage="Don't have an account yet?"
         link="sign-up"
         onSubmit={handleSubmit}
+        handleGoogleSignIn={handleGoogleSignIn}
         onChangeForEmail={event => setEmail(event.target.value)}
         onChangeForPassword={event => setPassword(event.target.value)}
       />

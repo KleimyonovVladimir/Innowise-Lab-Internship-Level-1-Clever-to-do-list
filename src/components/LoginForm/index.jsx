@@ -1,3 +1,4 @@
+import GoogleButton from 'react-google-button'
 import { useMediaQuery } from 'react-responsive'
 import { Link } from 'react-router-dom'
 import { Button, TextField } from '@mui/material'
@@ -12,6 +13,7 @@ const LoginForm = ({
   link,
   linkText,
   onSubmit,
+  handleGoogleSignIn,
   onChangeForEmail,
   onChangeForPassword
 }) => {
@@ -40,6 +42,8 @@ const LoginForm = ({
         <Button variant="contained" fullWidth type="submit">
           {buttonText}
         </Button>
+
+        <GoogleButton style={{ width: '100%', marginTop: '15px' }} onClick={handleGoogleSignIn} />
       </form>
       <div className={clsx('form-message', isMobile && 'form-message-mobile')}>
         <p>{formMessage}</p>
