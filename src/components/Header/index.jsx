@@ -5,6 +5,7 @@ import { Button } from '@mui/material'
 import clsx from 'clsx'
 
 import { useAuthContext } from '../../context/AuthContext'
+import { toastMessage } from '../../utils/toastMessage'
 
 import './styles.scss'
 
@@ -18,7 +19,7 @@ const Header = () => {
       await logOut()
       navigate('/login')
     } catch (error) {
-      console.log(error)
+      toastMessage(error.message)
     }
   }
 
@@ -26,7 +27,7 @@ const Header = () => {
 
   return (
     <header className="header">
-      <Link to="/home" className="logo">
+      <Link to="/" className="logo">
         <h1 className={clsx('', isMobile && 'logo-small')}>My todo app</h1>
       </Link>
       <Button variant="contained" onClick={signOutClick}>

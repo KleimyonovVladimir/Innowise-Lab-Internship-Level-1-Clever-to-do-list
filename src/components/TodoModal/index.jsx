@@ -1,14 +1,18 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router'
-import { Button, Checkbox, TextField } from '@mui/material'
+import { Button, Checkbox, Dialog, TextField } from '@mui/material'
 import { DesktopDatePicker, LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 
 import './styles.scss'
 
-const Form = ({ title = '', description = '', status = 'active', date = '', onSubmitClick }) => {
-  const navigate = useNavigate()
-
+const TodoModal = ({
+  title = '',
+  description = '',
+  status = 'active',
+  date = '',
+  onSubmitClick,
+  onClose
+}) => {
   const [todo, setTodo] = useState({
     title,
     description,
@@ -16,7 +20,6 @@ const Form = ({ title = '', description = '', status = 'active', date = '', onSu
     date
   })
   const [valueDate, setValueDate] = useState(todo.date || new Date())
-
   const handleChange = event => {
     const { name, value } = event.target
 
@@ -24,12 +27,14 @@ const Form = ({ title = '', description = '', status = 'active', date = '', onSu
   }
 
   const handleSaveClick = () => {
+    if (!todo.title.trim()) return
+
     onSubmitClick({
       ...todo,
       date: valueDate
     })
 
-    navigate('/home')
+    onClose()
   }
 
   const handleCheckbox = () => {
@@ -44,17 +49,20 @@ const Form = ({ title = '', description = '', status = 'active', date = '', onSu
   }
 
   return (
-    <>
+    <Dialog open onClose={onClose}>
       <div className="todo-form">
         <>
           <h4>Title:</h4>
           <div className="from-title-wrapper">
             <Checkbox checked={todo.status === 'done'} size="small" onChange={handleCheckbox} />
             <TextField
+              required
               variant="standard"
               name="title"
               defaultValue={todo.title}
               onChange={handleChange}
+              error={!todo.title.trim()}
+              helperText={!todo.title.trim() && 'This field is required'}
             />
           </div>
         </>
@@ -81,11 +89,16 @@ const Form = ({ title = '', description = '', status = 'active', date = '', onSu
           </LocalizationProvider>
         </>
       </div>
-      <Button variant="outlined" style={{ marginTop: 20 }} onClick={handleSaveClick}>
-        Save
-      </Button>
-    </>
+      <div className="todo-form-buttons">
+        <Button variant="outlined" onClick={onClose}>
+          Cancel
+        </Button>
+        <Button variant="outlined" onClick={handleSaveClick}>
+          Save
+        </Button>
+      </div>
+    </Dialog>
   )
 }
 
-export default Form
+export default TodoModal

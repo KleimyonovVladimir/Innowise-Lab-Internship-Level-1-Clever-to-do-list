@@ -1,7 +1,5 @@
 import { createTheme } from '@mui/material'
 
-// import colors from 'styles/variables/_colors.module.scss'
-
 export const theme = createTheme({
   typography: {
     fontFamily: 'Poppins, sans-serif',
@@ -42,6 +40,13 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           width: '100%'
+        }
+      }
+    },
+    MuiDialog: {
+      styleOverrides: {
+        paper: {
+          padding: '30px'
         }
       }
     }

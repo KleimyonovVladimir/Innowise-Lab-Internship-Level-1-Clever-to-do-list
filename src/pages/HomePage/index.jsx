@@ -1,16 +1,17 @@
 import { memo, useEffect, useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
-import { collection, onSnapshot, query, where } from '@firebase/firestore'
+import { addDoc, collection, onSnapshot, query, where } from '@firebase/firestore'
 import { Button } from '@mui/material'
 
 import Calendar from '../../components/Calendar'
 import TodoList from '../../components/TodoList'
+import TodoModal from '../../components/TodoModal'
 import { dataBase } from '../../firebase-config'
 import { removeTime } from '../../utils/removeTime'
 
 const Home = memo(() => {
   const [todoList, setTodoList] = useState([])
   const [activeDate, setActiveDate] = useState(new Date())
+  const [isTodoModalOpen, setTodoModalOpen] = useState(false)
 
   const onDateChange = date => {
     const selectedDate = new Date(date)
@@ -72,6 +73,19 @@ const Home = memo(() => {
     return arr
   }, [startDate, endDate])
 
+  const handleAddTodo = async todo => {
+    await addDoc(collection(dataBase, 'todos'), {
+      title: todo.title,
+      description: todo.description,
+      status: todo.status,
+      date: todo.date
+    })
+  }
+
+  const handleOpenCloseDialog = () => {
+    setTodoModalOpen(prev => !prev)
+  }
+
   return (
     <>
       <Calendar
@@ -80,10 +94,17 @@ const Home = memo(() => {
         activeDate={activeDate}
         onDateChange={onDateChange}
       />
+      <Button variant="contained" onClick={handleOpenCloseDialog}>
+        Add todo
+      </Button>
       <TodoList todoList={filteredTodos} setTodoList={setTodoList} />
-      <Link to="/add">
-        <Button variant="contained">Add todo</Button>
-      </Link>
+      {isTodoModalOpen && (
+        <TodoModal
+          date={activeDate}
+          onClose={handleOpenCloseDialog}
+          onSubmitClick={handleAddTodo}
+        />
+      )}
     </>
   )
 })

@@ -1,0 +1,9 @@
+@import '../../styles/variables/colors.module';
+
+.todo {
+  display: flex;
+  justify-content: space-between;
+  border-radius: 5px;
+  border: 1px solid $ui-color-light-blue;
+  padding: 10px;
+}

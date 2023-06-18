@@ -21,7 +21,7 @@ const SignInPage = () => {
       const response = await signIn(email, password)
       authContext.authUserChangeHandler(response)
 
-      navigate('/home')
+      navigate('/')
     } catch (error) {
       toastMessage(error.message)
     }
@@ -31,7 +31,7 @@ const SignInPage = () => {
     try {
       await googleSignIn()
 
-      navigate('/home')
+      navigate('/')
     } catch (error) {
       toastMessage(error.message)
     }
