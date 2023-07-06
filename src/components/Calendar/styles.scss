@@ -1,6 +1,26 @@
+@import '../../styles/variables/colors.module';
+
 .calendar {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: auto;
+  grid-auto-flow: column;
   grid-gap: 20px;
   margin-bottom: 20px;
+  padding-bottom: 15px;
+  overflow: auto;
+}
+.scroll {
+  &::-webkit-scrollbar {
+    width: 5px;
+    background-color: $ui-color-white;
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: $ui-color-light-green;
+  }
+  &::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    background-color: $ui-color-white;
+  }
 }

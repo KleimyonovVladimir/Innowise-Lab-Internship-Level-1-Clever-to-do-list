@@ -1,5 +1,6 @@
 import { memo } from 'react'
 
+import { changeDateFormat } from '../../utils/changeDateFormat'
 import CalendarDay from '../CalendarDay'
 
 import './styles.scss'
@@ -18,11 +19,22 @@ const findTodosStatuses = (object, day) => {
   }
 }
 
+const onWheel = e => {
+  if (!e.deltaY) return
+
+  e.currentTarget.scrollTo({
+    left: e.currentTarget.scrollLeft + e.deltaY
+  })
+}
+
 const Calendar = memo(({ activeDate, dateArr, elementsByDate, onDateChange }) => {
   return (
-    <ul className="calendar">
+    <ul onWheel={onWheel} className="calendar scroll">
       {dateArr.map((date, index) => {
-        const objectOfStatuses = findTodosStatuses(elementsByDate, date.getDate())
+        const objectOfStatuses = findTodosStatuses(
+          elementsByDate,
+          changeDateFormat(date, 'DD/MM/YYYY')
+        )
 
         return (
           <CalendarDay

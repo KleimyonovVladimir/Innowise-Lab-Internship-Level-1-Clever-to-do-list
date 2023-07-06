@@ -11,8 +11,8 @@
   padding: 12px;
   width: fit-content;
   cursor: pointer;
-  width: 50px;
   transition: ease 0.1s all;
+  width: 115px;
 
   &:hover {
     background-color: $ui-color-dark-blue;
@@ -22,6 +22,7 @@
 .day {
   &-number {
     margin-top: 6px;
+    font-weight: bold;
   }
 }
 .active-day {

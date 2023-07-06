@@ -6,6 +6,7 @@ import Calendar from '../../components/Calendar'
 import TodoList from '../../components/TodoList'
 import TodoModal from '../../components/TodoModal'
 import { dataBase } from '../../firebase-config'
+import { changeDateFormat } from '../../utils/changeDateFormat'
 import { removeTime } from '../../utils/removeTime'
 
 const Home = memo(() => {
@@ -20,10 +21,18 @@ const Home = memo(() => {
   }
 
   const startDate = new Date()
-  const endDate = new Date(startDate.getFullYear(), startDate.getMonth() + 1, 0)
+  const endDateOfMonth = new Date(startDate.getFullYear(), startDate.getMonth() + 1, 0)
+
+  const endDate = new Date(endDateOfMonth.setDate(startDate.getDate() + 31))
 
   const filteredTodos = useMemo(
-    () => todoList.filter(todo => todo.date.toDate().getDate() === activeDate.getDate()),
+    () =>
+      todoList.filter(
+        todo =>
+          todo.date.toDate().getDate() === activeDate.getDate() &&
+          todo.date.toDate().getMonth() === activeDate.getMonth() &&
+          todo.date.toDate().getFullYear() === activeDate.getFullYear()
+      ),
     [todoList, activeDate]
   )
 
@@ -35,7 +44,7 @@ const Home = memo(() => {
       query(
         collection(dataBase, 'todos'),
         where('date', '>=', requestStartDate),
-        where('date', '<', requestEndDate)
+        where('date', '<=', requestEndDate)
       ),
       querySnapshot => {
         setTodoList(querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id })))
@@ -48,7 +57,7 @@ const Home = memo(() => {
   const elementsByDate = useMemo(
     () =>
       todoList.reduce((acc, element) => {
-        const day = element.date.toDate().getDate()
+        const day = changeDateFormat(removeTime(element.date.toDate()), 'DD/MM/YYYY')
 
         if (!acc[day]) acc[day] = []
 
@@ -71,7 +80,7 @@ const Home = memo(() => {
     }
 
     return arr
-  }, [startDate, endDate])
+  }, [])
 
   const handleAddTodo = async todo => {
     await addDoc(collection(dataBase, 'todos'), {

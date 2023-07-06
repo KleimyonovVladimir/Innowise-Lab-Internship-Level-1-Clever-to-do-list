@@ -3,15 +3,20 @@ import clsx from 'clsx'
 import './styles.scss'
 
 const CalendarDay = ({ date, activeDate, objectOfStatuses, onDateChange }) => {
-  const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+  const weekDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
 
   const handleClick = () => {
     onDateChange(date)
   }
-
   return (
     <div
-      className={clsx('calendar-day', date.getDate() === activeDate.getDate() && 'active-day')}
+      className={clsx(
+        'calendar-day',
+        date.getFullYear() === activeDate.getFullYear() &&
+          date.getMonth() === activeDate.getMonth() &&
+          date.getDate() === activeDate.getDate() &&
+          'active-day'
+      )}
       onClick={handleClick}
     >
       <div className="day-name">{weekDays[date.getDay()]}</div>
