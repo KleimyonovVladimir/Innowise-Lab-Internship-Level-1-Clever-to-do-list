@@ -27,27 +27,34 @@ const onWheel = e => {
   })
 }
 
-const Calendar = memo(({ activeDate, dateArr, elementsByDate, onDateChange }) => {
-  return (
-    <ul onWheel={onWheel} className="calendar scroll">
-      {dateArr.map((date, index) => {
-        const objectOfStatuses = findTodosStatuses(
-          elementsByDate,
-          changeDateFormat(date, 'DD/MM/YYYY')
-        )
+const Calendar = memo(
+  ({ activeDate, dateArr, elementsByDate, onDateChange, horizontalBlockRef, onScroll }) => {
+    return (
+      <ul
+        ref={horizontalBlockRef}
+        onScroll={onScroll}
+        onWheel={onWheel}
+        className="calendar scroll"
+      >
+        {dateArr.map((date, index) => {
+          const objectOfStatuses = findTodosStatuses(
+            elementsByDate,
+            changeDateFormat(date, 'DD/MM/YYYY')
+          )
 
-        return (
-          <CalendarDay
-            objectOfStatuses={objectOfStatuses}
-            key={index}
-            date={date}
-            activeDate={activeDate}
-            onDateChange={onDateChange}
-          />
-        )
-      })}
-    </ul>
-  )
-})
+          return (
+            <CalendarDay
+              objectOfStatuses={objectOfStatuses}
+              key={index}
+              date={date}
+              activeDate={activeDate}
+              onDateChange={onDateChange}
+            />
+          )
+        })}
+      </ul>
+    )
+  }
+)
 
 export default Calendar

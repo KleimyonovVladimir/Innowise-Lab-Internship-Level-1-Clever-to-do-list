@@ -1,4 +1,4 @@
-import { memo, useEffect, useMemo, useState } from 'react'
+import { memo, useEffect, useMemo, useRef, useState } from 'react'
 import { addDoc, collection, onSnapshot, query, where } from '@firebase/firestore'
 import { Button } from '@mui/material'
 
@@ -10,20 +10,19 @@ import { changeDateFormat } from '../../utils/changeDateFormat'
 import { removeTime } from '../../utils/removeTime'
 
 const Home = memo(() => {
+  const horizontalBlockRef = useRef(null)
+
   const [todoList, setTodoList] = useState([])
   const [activeDate, setActiveDate] = useState(new Date())
   const [isTodoModalOpen, setTodoModalOpen] = useState(false)
-
-  const onDateChange = date => {
-    const selectedDate = new Date(date)
-
-    setActiveDate(selectedDate)
-  }
+  const [calendarDate, setCalendarDate] = useState([])
 
   const startDate = new Date()
   const endDateOfMonth = new Date(startDate.getFullYear(), startDate.getMonth() + 1, 0)
 
   const endDate = new Date(endDateOfMonth.setDate(startDate.getDate() + 31))
+
+  const [endDateOfScrolling, setEndDateOfScrolling] = useState(endDate)
 
   const filteredTodos = useMemo(
     () =>
@@ -38,7 +37,7 @@ const Home = memo(() => {
 
   useEffect(() => {
     const requestStartDate = removeTime(new Date(startDate))
-    const requestEndDate = removeTime(new Date(endDate))
+    const requestEndDate = removeTime(new Date(endDateOfScrolling))
 
     const unsubscribe = onSnapshot(
       query(
@@ -52,7 +51,7 @@ const Home = memo(() => {
     )
 
     return () => unsubscribe()
-  }, [])
+  }, [endDateOfScrolling])
 
   const elementsByDate = useMemo(
     () =>
@@ -68,20 +67,6 @@ const Home = memo(() => {
     [todoList]
   )
 
-  const dateArr = useMemo(() => {
-    const arr = []
-
-    let date = removeTime(new Date(startDate))
-
-    while (date <= endDate) {
-      arr.push(new Date(date))
-
-      date = new Date(date.setDate(date.getDate() + 1))
-    }
-
-    return arr
-  }, [])
-
   const handleAddTodo = async todo => {
     await addDoc(collection(dataBase, 'todos'), {
       title: todo.title,
@@ -95,13 +80,50 @@ const Home = memo(() => {
     setTodoModalOpen(prev => !prev)
   }
 
+  const onDateChange = date => {
+    const selectedDate = new Date(date)
+
+    setActiveDate(selectedDate)
+  }
+
+  const onScroll = () => {
+    const horizontalBlock = horizontalBlockRef.current
+
+    if (horizontalBlock) {
+      const scrollRight =
+        horizontalBlock.scrollWidth - horizontalBlock.clientWidth - horizontalBlock.scrollLeft
+
+      if (scrollRight < 250) {
+        const newEndDate = new Date(endDateOfScrolling)
+        newEndDate.setDate(newEndDate.getDate() + 1)
+        setEndDateOfScrolling(newEndDate)
+      }
+    }
+  }
+
+  useMemo(() => {
+    const arr = []
+
+    let date = removeTime(new Date(startDate))
+
+    while (date <= endDateOfScrolling) {
+      arr.push(new Date(date))
+
+      date = new Date(date.setDate(date.getDate() + 1))
+    }
+
+    setCalendarDate(arr)
+  }, [endDateOfScrolling])
+
   return (
     <>
       <Calendar
-        dateArr={dateArr}
+        dateArr={calendarDate}
         elementsByDate={elementsByDate}
         activeDate={activeDate}
         onDateChange={onDateChange}
+        onScroll={onScroll}
+        horizontalBlockRef={horizontalBlockRef}
       />
       <Button variant="contained" onClick={handleOpenCloseDialog}>
         Add todo
